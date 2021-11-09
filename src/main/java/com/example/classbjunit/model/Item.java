@@ -7,10 +7,29 @@ import javax.persistence.Transient;
 @Entity
 public class Item {
 
-	public Item(int id, String name, int price) {
+	public Item(int id, String name, int price, int quantity) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
+		this.quantity = quantity;
+	}
+
+
+	@Id
+	private int id;
+	
+	private String name;
+	
+	private int price;
+
+	@Transient
+	private final int total=this.price*this.quantity;
+	private  int quantity;
+
+	
+	public Item() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getId() {
@@ -37,18 +56,17 @@ public class Item {
 		this.price = price;
 	}
 
-	@Id
-	private int id;
-	
-	private String name;
-	
-	private int price;
-
-	
-	public Item() {
-		super();
-		// TODO Auto-generated constructor stub
+	public int getQuantity() {
+		return quantity;
 	}
-	
-	
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public int getTotal() {
+		return total;
+	}
+
+
 }

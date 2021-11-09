@@ -14,17 +14,17 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-@Transactional
 public class CartService {
 
 
     @Autowired
     private CartRepo cartRepo;
-    @Autowired
+
     ItemRepository itemRepository;
 
     public void createCart(Cart cart){
  cartRepo.save(cart);
+
     }
 
     public  void addTOCart(Long Id,List <Item> item){
@@ -38,7 +38,7 @@ public class CartService {
          Item toget=item.get(0);
          Item itemgot=itemRepository.getById(toget.getId());
 
-        int newPrice=itemgot.getPrice()+cart.getTotalPrice();
+        int newPrice=itemgot.getTotal()+cart.getTotalPrice();
         cart.setTotalPrice(newPrice);
         cartRepo.save(cart);
         }
@@ -51,12 +51,18 @@ public class CartService {
         }
         else{
             Cart cart=cartRepo.getById(cartId);
+
             List <Item> its=cart.getIts();
             List <Item> newOne=new ArrayList<>();
 
             for (Item on : its) {
                 if (on.getId() != itemId) {
                     newOne.add(on);
+                }
+                else
+                {
+                    int newPrice=cart.getTotalPrice()-on.getTotal();
+                    cart.setTotalPrice(newPrice);
                 }
             }
             cart.setIts(newOne);
@@ -65,4 +71,9 @@ public class CartService {
     }
 
 
+    public static void main(String[] args) {
+        Cart cart=new Cart(0,0);
+        CartService service=new CartService();
+        service.createCart(cart);
+    }
 }
